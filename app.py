@@ -49,6 +49,7 @@ model.fit(X_train, y_train)
 
 # Streamlit app
 st.title('Spam/Ham Classifier')
+st.write('App is created by nopal-fz and fbrianzy on GitHub')
 user_input = st.text_area('Enter the text to classify')
 
 if st.button('Predict'):
