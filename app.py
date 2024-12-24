@@ -4,10 +4,9 @@ import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix, f1_score
-import joblib
 
 # Load the data
-path = 'C:\\Project UAS - AI\\data\\enron_preprocessing_fix.csv'
+path = './data/enron_preprocessing_fix.csv'
 df = pd.read_csv(path)
 df = df.dropna()
 df['Spam/Ham'] = df['Spam/Ham'].map({'spam': 1, 'ham': 0})
@@ -44,26 +43,18 @@ class MultinomialNB():
         log_prob = np.log(self.class_prob) + X @ np.log(self.feature_prob.T)
         return self.classes[np.argmax(log_prob, axis=1)]
 
-# Train the model and save it
+# Train the model
 model = MultinomialNB()
 model.fit(X_train, y_train)
-
-# Save the trained model and vectorizer
-joblib.dump(model, 'multinomial_nb_model.pkl')
-joblib.dump(vectorizer, 'tfidf_vectorizer.pkl')
 
 # Streamlit app
 st.title('Spam/Ham Classifier')
 user_input = st.text_area('Enter the text to classify')
 
 if st.button('Predict'):
-    # Load the saved model and vectorizer
-    loaded_model = joblib.load('multinomial_nb_model.pkl')
-    loaded_vectorizer = joblib.load('tfidf_vectorizer.pkl')
-
     if user_input:
-        user_input_vectorized = loaded_vectorizer.transform([user_input]).toarray()
-        prediction = loaded_model.predict(user_input_vectorized)
+        user_input_vectorized = vectorizer.transform([user_input]).toarray()
+        prediction = model.predict(user_input_vectorized)
         result = 'Spam' if prediction[0] == 1 else 'Ham'
         st.write(f'The text is classified as: {result}')
     else:
