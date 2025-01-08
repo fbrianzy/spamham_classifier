@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report, confusion_matrix, f1_score
+from sklearn.metrics import accuracy_score
 
 # Load the data
 path = './data/enron_modelling.csv'
@@ -47,8 +47,26 @@ class MultinomialNB():
 model = MultinomialNB()
 model.fit(X_train, y_train)
 
+# Evaluate the model
+y_pred = model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred) * 100
+
 # Streamlit app
 st.title('Spam/Ham Classifier')
+
+# Display accuracy using st.info
+st.info(f'Model Accuracy: {accuracy:.2f}%')
+
+# Center the image
+st.markdown(
+    """
+    <div style="text-align: center;">
+        <img src="https://raw.githubusercontent.com/fbrianzy/spamham_classifier/main/assets/she_classifier_icon.png" alt="App Icon" style="width: 500px;">
+    </div>
+    """, 
+    unsafe_allow_html=True
+)
+
 user_input = st.text_area('Enter the text to classify')
 
 if st.button('Predict'):
@@ -56,6 +74,9 @@ if st.button('Predict'):
         user_input_vectorized = vectorizer.transform([user_input]).toarray()
         prediction = model.predict(user_input_vectorized)
         result = 'Spam' if prediction[0] == 1 else 'Ham'
-        st.write(f'The text is classified as: {result}')
+        if result == 'Spam':
+            st.error(f'The text is classified as: {result}')
+        else:
+            st.success(f'The text is classified as: {result}')
     else:
         st.write('Please enter some text to classify.')
