@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix, f1_score
 
 # Load the data
-path = 'data\\enron_modelling.csv'
+path = './data/enron_modelling.csv'
 df = pd.read_csv(path)
 df = df.dropna()
 df['Spam/Ham'] = df['Spam/Ham'].map({'spam': 1, 'ham': 0})
