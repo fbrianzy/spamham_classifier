@@ -52,7 +52,8 @@ y_pred = model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred) * 100
 
 # Streamlit app
-st.title('Spam/Ham Classifier')
+st.title('Spam/Ham Email Classifier')
+st.write('Project by Artificial Intelligence State University of Surabaya Team 10 | Github profiles: fbrianzy, nopal-fz')
 
 # Display accuracy using st.info
 st.info(f'Model Accuracy: {accuracy:.2f}%')
