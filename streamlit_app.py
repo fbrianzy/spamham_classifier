@@ -1,9 +1,27 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import base64
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+
+def add_bg_from_local(image_file):
+    with open(image_file, "rb") as f:
+        encoded_string = base64.b64encode(f.read()).decode()
+    
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url(data:image/jpg;base64,{encoded_string});
+            background-size: cover;
+            background-position: center;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
 # Load the data
 path = './data/enron_modelling.csv'
@@ -50,6 +68,8 @@ model.fit(X_train, y_train)
 # Evaluate the model
 y_pred = model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred) * 100
+
+add_bg_from_local('./assets/galaxy-night-view.jpg')
 
 # Streamlit app
 st.title('Spam/Ham Email Classifier')
